@@ -6,6 +6,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -26,11 +29,9 @@ public class UserDVO extends BaseDVO{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long userId;
 	
-	private long roleId;
-	
-	@Transient
-	@Enumerated(EnumType.STRING)
-	private ERole roleName;
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private RoleDVO role;
 	
 	private String userName;
 	
@@ -43,4 +44,11 @@ public class UserDVO extends BaseDVO{
 	private String address;
 	
 	private String sex;
+	
+	public UserDVO(String userName, String email,String password) {
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+				
+	}
 }

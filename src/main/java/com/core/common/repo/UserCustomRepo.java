@@ -1,5 +1,9 @@
 package com.core.common.repo;
 
-public interface UserCustomRepo {
+import java.util.Optional;
 
+import com.core.common.entity.UserDVO;
+
+public interface UserCustomRepo {
+	Optional<UserDVO> findByUserName(String userName);
 }

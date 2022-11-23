@@ -16,7 +16,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -30,26 +30,19 @@ public class UserDetailsImpl implements UserDetails {
 	@JsonIgnore
 	private String password;
 
-	private GrantedAuthority authorities;
+	private Collection<? extends GrantedAuthority> authorities;
 
 	public static UserDetailsImpl build(UserDVO userDVO) {
-		GrantedAuthority authorities = new SimpleGrantedAuthority(userDVO.getRoleName().name());
-		
-//		authorities = 
-		
-//		return new UserDetailsImpl(
-//			userDVO.getUserId(),
-//			userDVO.getUserName(),
-//			userDVO.getEmail(),
-//			userDVO.getPassword(),
-//			authorities
-//		);
-		return null;
+//		GrantedAuthority authorities = new SimpleGrantedAuthority(userDVO.getRole().getRoleName().name());
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(userDVO.getRole().getRoleName().name()));
+		return new UserDetailsImpl(userDVO.getUserId(), userDVO.getUserName(), userDVO.getEmail(),
+				userDVO.getPassword(), authorities);
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return (Collection<? extends GrantedAuthority>) authorities;
+		return  authorities;
 	}
 
 	@Override
@@ -80,6 +73,14 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public UserDetailsImpl(long userId, String userName, String email, String password, List<SimpleGrantedAuthority> authorities) {
+		this.userId = userId;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.authorities = authorities;
 	}
 
 }
